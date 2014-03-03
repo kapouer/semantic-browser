@@ -58,6 +58,39 @@ $.fn.form = function(fields, parameters) {
 
         initialize: function() {
           module.verbose('Initializing form validation', $module, validation, settings);
+          module.bindEvents();
+          module.instantiate();
+        },
+
+        instantiate: function() {
+          module.verbose('Storing instance of module', module);
+          instance = module;
+          $module
+            .data(moduleNamespace, module)
+          ;
+        },
+
+        destroy: function() {
+          module.verbose('Destroying previous module', instance);
+          module.removeEvents();
+          $module
+            .removeData(moduleNamespace)
+          ;
+        },
+
+        refresh: function() {
+          module.verbose('Refreshing selector cache');
+          $field = $module.find(selector.field);
+        },
+
+        submit: function() {
+          module.verbose('Submitting form', $module);
+          $module
+            .submit()
+          ;
+        },
+
+        bindEvents: function() {
           if(settings.keyboardShortcuts) {
             $field
               .on('keydown' + eventNamespace, module.event.field.keydown)
@@ -73,36 +106,32 @@ $.fn.form = function(fields, parameters) {
             .on('click' + eventNamespace, module.submit)
           ;
           $field
-            .on(module.get.changeEvent() + eventNamespace, module.event.field.change)
+            .each(function() {
+              var  
+                type       = $(this).prop('type'),
+                inputEvent = module.get.changeEvent(type)
+              ;
+              if(settings.inline == true) {
+              }
+              $(this)
+                .on(inputEvent + eventNamespace, module.event.field.change)
+              ;
+            })
           ;
-          module.instantiate();
         },
 
-        instantiate: function() {
-          module.verbose('Storing instance of module', module);
-          instance = module;
-          $module
-            .data(moduleNamespace, module)
-          ;
-        },
-
-        destroy: function() {
-          module.verbose('Destroying previous module', instance);
+        removeEvents: function() {
           $module
             .off(eventNamespace)
-            .removeData(moduleNamespace)
           ;
-        },
-
-        refresh: function() {
-          module.verbose('Refreshing selector cache');
-          $field = $module.find(selector.field);
-        },
-
-        submit: function() {
-          module.verbose('Submitting form', $module);
-          $module
-            .submit()
+          $field
+            .off(eventNamespace)
+          ;
+          $submit
+            .off(eventNamespace)
+          ;
+          $field
+            .off(eventNamespace)
           ;
         },
 
@@ -171,13 +200,18 @@ $.fn.form = function(fields, parameters) {
         },
 
         get: {
-          changeEvent: function() {
-            return (document.createElement('input').oninput !== undefined)
-              ? 'input'
-              : (document.createElement('input').onpropertychange !== undefined)
-                ? 'propertychange'
-                : 'keyup'
-            ;
+          changeEvent: function(type) {
+            if(type == 'checkbox' || type == 'radio') {
+              return 'change';
+            }
+            else {
+              return (document.createElement('input').oninput !== undefined)
+                ? 'input'
+                : (document.createElement('input').onpropertychange !== undefined)
+                  ? 'propertychange'
+                  : 'keyup'
+              ;
+            }
           },
           field: function(identifier) {
             module.verbose('Finding field with identifier', identifier);
@@ -224,14 +258,18 @@ $.fn.form = function(fields, parameters) {
         },
 
         add: {
-          prompt: function(field, errors) {
+          prompt: function(identifier, errors) {
             var
-              $field       = module.get.field(field.identifier),
+              $field       = module.get.field(identifier),
               $fieldGroup  = $field.closest($group),
               $prompt      = $fieldGroup.find(selector.prompt),
               promptExists = ($prompt.size() !== 0)
             ;
-            module.verbose('Adding inline error', field);
+            errors = (typeof errors == 'string')
+              ? [errors]
+              : errors
+            ;
+            module.verbose('Adding field error state', identifier);
             $fieldGroup
               .addClass(className.error)
             ;
@@ -256,6 +294,9 @@ $.fn.form = function(fields, parameters) {
                     .fadeIn(settings.duration)
                   ;
                 }
+              }
+              else {
+                module.verbose('Inline errors are disabled, no inline error added', identifier);
               }
             }
           },
@@ -314,7 +355,7 @@ $.fn.form = function(fields, parameters) {
                 .removeClass(className.error)
                 .addClass(className.success)
               ;
-              $.proxy(settings.onSuccess, this)(event);
+              return $.proxy(settings.onSuccess, this)(event);
             }
             else {
               module.debug('Form has errors');
@@ -348,7 +389,7 @@ $.fn.form = function(fields, parameters) {
             }
             else {
               formErrors = formErrors.concat(fieldErrors);
-              module.add.prompt(field, fieldErrors);
+              module.add.prompt(field.identifier, fieldErrors);
               $.proxy(settings.onInvalid, $field)(fieldErrors);
               return false;
             }
@@ -360,9 +401,9 @@ $.fn.form = function(fields, parameters) {
             var
               $field        = module.get.field(field.identifier),
               type          = validation.type,
-              value         = $field.val() + '',
+              value         = $.trim($field.val() + ''),
 
-              bracketRegExp = /\[(.*?)\]/i,
+              bracketRegExp = /\[(.*)\]/i,
               bracket       = bracketRegExp.exec(type),
               isValid       = true,
               ancillary,
@@ -486,13 +527,14 @@ $.fn.form = function(fields, parameters) {
         },
         invoke: function(query, passedArguments, context) {
           var
+            object = instance,
             maxDepth,
             found,
             response
           ;
           passedArguments = passedArguments || queryArguments;
           context         = element         || context;
-          if(typeof query == 'string' && instance !== undefined) {
+          if(typeof query == 'string' && object !== undefined) {
             query    = query.split(/[\. ]/);
             maxDepth = query.length - 1;
             $.each(query, function(depth, value) {
@@ -500,22 +542,21 @@ $.fn.form = function(fields, parameters) {
                 ? value + query[depth + 1].charAt(0).toUpperCase() + query[depth + 1].slice(1)
                 : query
               ;
-              if( $.isPlainObject( instance[camelCaseValue] ) && (depth != maxDepth) ) {
-                instance = instance[camelCaseValue];
+              if( $.isPlainObject( object[camelCaseValue] ) && (depth != maxDepth) ) {
+                object = object[camelCaseValue];
               }
-              else if( instance[camelCaseValue] !== undefined ) {
-                found = instance[camelCaseValue];
+              else if( object[camelCaseValue] !== undefined ) {
+                found = object[camelCaseValue];
                 return false;
               }
-              else if( $.isPlainObject( instance[value] ) && (depth != maxDepth) ) {
-                instance = instance[value];
+              else if( $.isPlainObject( object[value] ) && (depth != maxDepth) ) {
+                object = object[value];
               }
-              else if( instance[value] !== undefined ) {
-                found = instance[value];
+              else if( object[value] !== undefined ) {
+                found = object[value];
                 return false;
               }
               else {
-                module.error(error.method, query);
                 return false;
               }
             });
