@@ -10,7 +10,7 @@
 
 ;(function ($, window, document, undefined) {
 
-$.fn.video = function(parameters) {
+module.exports = function(parameters) {
 
   var
     $allModules     = $(this),
@@ -31,8 +31,8 @@ $.fn.video = function(parameters) {
     .each(function() {
       var
         settings        = ( $.isPlainObject(parameters) )
-          ? $.extend(true, {}, $.fn.video.settings, parameters)
-          : $.extend({}, $.fn.video.settings),
+          ? $.extend(true, {}, module.exports.settings, parameters)
+          : $.extend({}, module.exports.settings),
 
         selector        = settings.selector,
         className       = settings.className,
@@ -407,12 +407,12 @@ $.fn.video = function(parameters) {
   ;
 };
 
-$.fn.video.settings = {
+module.exports.settings = {
 
   name        : 'Video',
   namespace   : 'video',
 
-  debug       : true,
+  debug       : false,
   verbose     : true,
   performance : true,
 
@@ -456,4 +456,4 @@ $.fn.video.settings = {
 };
 
 
-})( jQuery, window , document );
+})( require("jquery"), window , document );

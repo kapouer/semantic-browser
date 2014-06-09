@@ -11,7 +11,7 @@
 
 ;(function ( $, window, document, undefined ) {
 
-$.fn.checkbox = function(parameters) {
+module.exports = function(parameters) {
   var
     $allModules    = $(this),
     moduleSelector = $allModules.selector || '',
@@ -28,7 +28,7 @@ $.fn.checkbox = function(parameters) {
   $allModules
     .each(function() {
       var
-        settings        = $.extend(true, {}, $.fn.checkbox.settings, parameters),
+        settings        = $.extend(true, {}, module.exports.settings, parameters),
 
         className       = settings.className,
         namespace       = settings.namespace,
@@ -130,11 +130,13 @@ $.fn.checkbox = function(parameters) {
 
         toggle: function(event) {
           module.verbose('Determining new checkbox state');
-          if( module.is.disabled() ) {
-            module.enable();
-          }
-          else if( module.is.enabled() && module.can.disable() ) {
-            module.disable();
+          if( !$input.prop('disabled') ) {
+            if( module.is.disabled() ) {
+              module.enable();
+            }
+            else if( module.is.enabled() && module.can.disable() ) {
+              module.disable();
+            }
           }
         },
         setting: function(name, value) {
@@ -312,13 +314,13 @@ $.fn.checkbox = function(parameters) {
   ;
 };
 
-$.fn.checkbox.settings = {
+module.exports.settings = {
 
   name        : 'Checkbox',
   namespace   : 'checkbox',
 
+  debug       : false,
   verbose     : true,
-  debug       : true,
   performance : true,
 
   // delegated event context
@@ -344,4 +346,4 @@ $.fn.checkbox.settings = {
 
 };
 
-})( jQuery, window , document );
+})( require("jquery"), window , document );

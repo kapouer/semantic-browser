@@ -11,7 +11,7 @@
 
 ;(function ( $, window, document, undefined ) {
 
-$.fn.transition = function() {
+module.exports = function() {
   var
     $allModules     = $(this),
     moduleSelector  = $allModules.selector || '',
@@ -226,7 +226,7 @@ $.fn.transition = function() {
             var
               displayType = module.get.displayType()
             ;
-            if(displayType !== 'block') {
+            if(displayType !== 'block' && displayType !== 'none') {
               module.verbose('Setting final visibility to', displayType);
               $module
                 .css({
@@ -298,7 +298,7 @@ $.fn.transition = function() {
             instance.displayType = displayType;
           },
           transitionExists: function(animation, exists) {
-            $.fn.transition.exists[animation] = exists;
+            module.exports.exists[animation] = exists;
             module.verbose('Saving existence of transition', animation, exists);
           },
           conditions: function() {
@@ -383,11 +383,11 @@ $.fn.transition = function() {
           settings: function(animation, duration, complete) {
             // single settings object
             if(typeof animation == 'object') {
-              return $.extend(true, {}, $.fn.transition.settings, animation);
+              return $.extend(true, {}, module.exports.settings, animation);
             }
             // all arguments provided
             else if(typeof complete == 'function') {
-              return $.extend({}, $.fn.transition.settings, {
+              return $.extend({}, module.exports.settings, {
                 animation : animation,
                 complete  : complete,
                 duration  : duration
@@ -395,31 +395,31 @@ $.fn.transition = function() {
             }
             // only duration provided
             else if(typeof duration == 'string' || typeof duration == 'number') {
-              return $.extend({}, $.fn.transition.settings, {
+              return $.extend({}, module.exports.settings, {
                 animation : animation,
                 duration  : duration
               });
             }
             // duration is actually settings object
             else if(typeof duration == 'object') {
-              return $.extend({}, $.fn.transition.settings, duration, {
+              return $.extend({}, module.exports.settings, duration, {
                 animation : animation
               });
             }
             // duration is actually callback
             else if(typeof duration == 'function') {
-              return $.extend({}, $.fn.transition.settings, {
+              return $.extend({}, module.exports.settings, {
                 animation : animation,
                 complete  : duration
               });
             }
             // only animation provided
             else {
-              return $.extend({}, $.fn.transition.settings, {
+              return $.extend({}, module.exports.settings, {
                 animation : animation
               });
             }
-            return $.fn.transition.settings;
+            return module.exports.settings;
           },
 
           displayType: function() {
@@ -431,7 +431,7 @@ $.fn.transition = function() {
           },
 
           transitionExists: function(animation) {
-            return $.fn.transition.exists[animation];
+            return module.exports.exists[animation];
           },
 
           animationName: function() {
@@ -460,7 +460,7 @@ $.fn.transition = function() {
               animations  = {
                 'animation'       :'animationend',
                 'OAnimation'      :'oAnimationEnd',
-                'MozAnimation'    :'mozAnimationEnd',
+                'MozAnimation'    :'animationend',
                 'WebkitAnimation' :'webkitAnimationEnd'
               },
               animation
@@ -753,9 +753,9 @@ $.fn.transition = function() {
   ;
 };
 
-$.fn.transition.exists = {};
+module.exports.exists = {};
 
-$.fn.transition.settings = {
+module.exports.settings = {
 
   // module info
   name        : 'Transition',
@@ -810,4 +810,4 @@ $.fn.transition.settings = {
 };
 
 
-})( jQuery, window , document );
+})( require("jquery"), window , document );

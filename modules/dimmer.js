@@ -11,7 +11,7 @@
 
 ;(function ( $, window, document, undefined ) {
 
-$.fn.dimmer = function(parameters) {
+module.exports = function(parameters) {
   var
     $allModules     = $(this),
 
@@ -29,8 +29,8 @@ $.fn.dimmer = function(parameters) {
     .each(function() {
       var
         settings        = ( $.isPlainObject(parameters) )
-          ? $.extend(true, {}, $.fn.dimmer.settings, parameters)
-          : $.extend({}, $.fn.dimmer.settings),
+          ? $.extend(true, {}, module.exports.settings, parameters)
+          : $.extend({}, module.exports.settings),
 
         selector        = settings.selector,
         namespace       = settings.namespace,
@@ -155,7 +155,7 @@ $.fn.dimmer = function(parameters) {
               : function(){}
             ;
             module.set.dimmed();
-            if(settings.on != 'hover' && settings.useCSS && $.fn.transition !== undefined && $dimmer.transition('is supported')) {
+            if(settings.on != 'hover' && settings.useCSS && module.exports !== undefined && $dimmer.transition('is supported')) {
               $dimmer
                 .transition({
                   animation : settings.transition + ' in',
@@ -190,7 +190,7 @@ $.fn.dimmer = function(parameters) {
               ? callback
               : function(){}
             ;
-            if(settings.on != 'hover' && settings.useCSS && $.fn.transition !== undefined && $dimmer.transition('is supported')) {
+            if(settings.on != 'hover' && settings.useCSS && module.exports !== undefined && $dimmer.transition('is supported')) {
               module.verbose('Hiding dimmer with css');
               $dimmer
                 .transition({
@@ -538,12 +538,12 @@ $.fn.dimmer = function(parameters) {
   ;
 };
 
-$.fn.dimmer.settings = {
+module.exports.settings = {
 
   name        : 'Dimmer',
   namespace   : 'dimmer',
 
-  debug       : true,
+  debug       : false,
   verbose     : true,
   performance : true,
 
@@ -590,4 +590,4 @@ $.fn.dimmer.settings = {
 
 };
 
-})( jQuery, window , document );
+})( require("jquery"), window , document );

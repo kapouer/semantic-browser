@@ -11,7 +11,7 @@
 
 ;(function ($, window, document, undefined) {
 
-$.fn.nag = function(parameters) {
+module.exports = function(parameters) {
   var
     $allModules     = $(this),
     moduleSelector  = $allModules.selector || '',
@@ -27,7 +27,7 @@ $.fn.nag = function(parameters) {
   $(this)
     .each(function() {
       var
-        settings        = $.extend(true, {}, $.fn.nag.settings, parameters),
+        settings        = $.extend(true, {}, module.exports.settings, parameters),
 
         className       = settings.className,
         selector        = settings.selector,
@@ -478,12 +478,12 @@ $.fn.nag = function(parameters) {
   ;
 };
 
-$.fn.nag.settings = {
+module.exports.settings = {
 
   name        : 'Nag',
 
+  debug       : false,
   verbose     : true,
-  debug       : true,
   performance : true,
 
   namespace   : 'Nag',
@@ -540,4 +540,4 @@ $.fn.nag.settings = {
 
 };
 
-})( jQuery, window , document );
+})( require("jquery"), window , document );

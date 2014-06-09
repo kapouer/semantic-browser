@@ -11,7 +11,7 @@
 
 ;(function ($, window, document, undefined) {
 
-$.fn.popup = function(parameters) {
+module.exports = function(parameters) {
   var
     $allModules     = $(this),
     $document       = $(document),
@@ -31,8 +31,8 @@ $.fn.popup = function(parameters) {
     .each(function() {
       var
         settings        = ( $.isPlainObject(parameters) )
-          ? $.extend(true, {}, $.fn.popup.settings, parameters)
-          : $.extend({}, $.fn.popup.settings),
+          ? $.extend(true, {}, module.exports.settings, parameters)
+          : $.extend({}, module.exports.settings),
 
         selector        = settings.selector,
         className       = settings.className,
@@ -259,6 +259,7 @@ $.fn.popup = function(parameters) {
           $popup
             .remove()
           ;
+          $.proxy(settings.onRemove, $popup)();
         },
 
         save: {
@@ -287,7 +288,7 @@ $.fn.popup = function(parameters) {
             $module
               .addClass(className.visible)
             ;
-            if(settings.transition && $.fn.transition !== undefined && $module.transition('is supported')) {
+            if(settings.transition && module.exports !== undefined && $module.transition('is supported')) {
               $popup
                 .transition(settings.transition + ' in', settings.duration, function() {
                   module.bind.close();
@@ -309,7 +310,7 @@ $.fn.popup = function(parameters) {
           hide: function(callback) {
             callback = callback || function(){};
             module.debug('Hiding pop-up');
-            if(settings.transition && $.fn.transition !== undefined && $module.transition('is supported')) {
+            if(settings.transition && module.exports !== undefined && $module.transition('is supported')) {
               $popup
                 .transition(settings.transition + ' out', settings.duration, function() {
                   module.reset();
@@ -777,15 +778,16 @@ $.fn.popup = function(parameters) {
   ;
 };
 
-$.fn.popup.settings = {
+module.exports.settings = {
 
   name           : 'Popup',
-  debug          : true,
+  debug          : false,
   verbose        : true,
   performance    : true,
   namespace      : 'popup',
 
   onCreate       : function(){},
+  onRemove       : function(){},
   onShow         : function(){},
   onHide         : function(){},
 
@@ -805,7 +807,7 @@ $.fn.popup.settings = {
   preserve       : false,
 
   duration       : 250,
-  easing         : 'easeOutQuint',
+  easing         : 'easeOutQuad',
   transition     : 'scale',
 
   distanceAway   : 0,
@@ -854,4 +856,12 @@ $.fn.popup.settings = {
 
 };
 
-})( jQuery, window , document );
+// Adds easing
+$.extend( $.easing, {
+  easeOutQuad: function (x, t, b, c, d) {
+    return -c *(t/=d)*(t-2) + b;
+  }
+});
+
+
+})( require("jquery"), window , document );

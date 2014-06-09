@@ -11,7 +11,7 @@
 
 ;(function ($, window, document, undefined) {
 
-$.fn.search = function(source, parameters) {
+module.exports = function(source, parameters) {
   var
     $allModules     = $(this),
     moduleSelector  = $allModules.selector || '',
@@ -27,7 +27,7 @@ $.fn.search = function(source, parameters) {
   $(this)
     .each(function() {
       var
-        settings        = $.extend(true, {}, $.fn.search.settings, parameters),
+        settings        = $.extend(true, {}, module.exports.settings, parameters),
 
         className       = settings.className,
         selector        = settings.selector,
@@ -137,7 +137,7 @@ $.fn.search = function(source, parameters) {
           if($results.filter(':visible').size() > 0) {
             if(keyCode == keys.enter) {
               module.verbose('Enter key pressed, selecting active result');
-              if( $result.filter('.' + activeClass).exists() ) {
+              if( $result.filter('.' + activeClass).size() > 0 ) {
                 $.proxy(module.results.select, $result.filter('.' + activeClass) )();
                 event.preventDefault();
                 return false;
@@ -582,12 +582,12 @@ $.fn.search = function(source, parameters) {
   ;
 };
 
-$.fn.search.settings = {
+module.exports.settings = {
 
   name           : 'Search Module',
   namespace      : 'search',
 
-  debug          : true,
+  debug          : false,
   verbose        : true,
   performance    : true,
 
@@ -763,4 +763,4 @@ $.fn.search.settings = {
   }
 };
 
-})( jQuery, window , document );
+})( require("jquery"), window , document );

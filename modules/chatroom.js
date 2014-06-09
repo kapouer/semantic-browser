@@ -11,7 +11,7 @@
 
 ;(function ($, window, document, undefined) {
 
-$.fn.chatroom = function(parameters) {
+module.exports = function(parameters) {
   var
     $allModules    = $(this),
     moduleSelector = $allModules.selector || '',
@@ -27,7 +27,7 @@ $.fn.chatroom = function(parameters) {
   $(this)
     .each(function() {
       var
-        settings  = $.extend(true, {}, $.fn.chatroom.settings, parameters),
+        settings  = $.extend(true, {}, module.exports.settings, parameters),
 
         className = settings.className,
         namespace = settings.namespace,
@@ -588,14 +588,13 @@ $.fn.chatroom = function(parameters) {
     }
   })
 ;
-
-  return (returnedValue)
+  return (returnedValue !== undefined)
     ? returnedValue
     : this
   ;
 };
 
-  $.fn.chatroom.settings = {
+  module.exports.settings = {
 
     name            : 'Chat',
     debug           : false,
@@ -770,4 +769,4 @@ $.fn.chatroom = function(parameters) {
 
   };
 
-})( jQuery, window , document );
+})( require("jquery"), window , document );

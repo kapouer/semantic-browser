@@ -11,7 +11,7 @@
 
 ;(function ($, window, document, undefined) {
 
-$.fn.rating = function(parameters) {
+module.exports = function(parameters) {
   var
     $allModules     = $(this),
     moduleSelector  = $allModules.selector || '',
@@ -28,8 +28,8 @@ $.fn.rating = function(parameters) {
     .each(function() {
       var
         settings        = ( $.isPlainObject(parameters) )
-          ? $.extend(true, {}, $.fn.rating.settings, parameters)
-          : $.extend({}, $.fn.rating.settings),
+          ? $.extend(true, {}, module.exports.settings, parameters)
+          : $.extend({}, module.exports.settings),
 
         namespace       = settings.namespace,
         className       = settings.className,
@@ -368,13 +368,13 @@ $.fn.rating = function(parameters) {
   ;
 };
 
-$.fn.rating.settings = {
+module.exports.settings = {
 
   name          : 'Rating',
   namespace     : 'rating',
 
   verbose       : true,
-  debug         : true,
+  debug         : false,
   performance   : true,
 
   initialRating : 0,
@@ -404,4 +404,4 @@ $.fn.rating.settings = {
 
 };
 
-})( jQuery, window , document );
+})( require("jquery"), window , document );

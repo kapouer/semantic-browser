@@ -11,9 +11,9 @@
 
 ;(function ( $, window, document, undefined ) {
 
-  $.fn.colorize = function(parameters) {
+  module.exports = function(parameters) {
     var
-      settings        = $.extend(true, {}, $.fn.colorize.settings, parameters),
+      settings        = $.extend(true, {}, module.exports.settings, parameters),
       // hoist arguments
       moduleArguments = arguments || false
     ;
@@ -240,7 +240,7 @@
     return this;
   };
 
-  $.fn.colorize.settings = {
+  module.exports.settings = {
     name      : 'Image Colorizer',
     debug     : true,
     namespace : 'colorize',
@@ -267,4 +267,4 @@
 
   };
 
-})( jQuery, window , document );
+})( require("jquery"), window , document );

@@ -11,12 +11,12 @@
 
 ;(function ( $, window, document, undefined ) {
 
-$.fn.form = function(fields, parameters) {
+module.exports = function(fields, parameters) {
   var
     $allModules     = $(this),
 
-    settings        = $.extend(true, {}, $.fn.form.settings, parameters),
-    validation      = $.extend({}, $.fn.form.settings.defaults, fields),
+    settings        = $.extend(true, {}, module.exports.settings, parameters),
+    validation      = $.extend({}, module.exports.settings.defaults, fields),
 
     namespace       = settings.namespace,
     metadata        = settings.metadata,
@@ -107,12 +107,10 @@ $.fn.form = function(fields, parameters) {
           ;
           $field
             .each(function() {
-              var  
+              var
                 type       = $(this).prop('type'),
                 inputEvent = module.get.changeEvent(type)
               ;
-              if(settings.inline == true) {
-              }
               $(this)
                 .on(inputEvent + eventNamespace, module.event.field.change)
               ;
@@ -201,7 +199,7 @@ $.fn.form = function(fields, parameters) {
 
         get: {
           changeEvent: function(type) {
-            if(type == 'checkbox' || type == 'radio') {
+            if(type == 'checkbox' || type == 'radio' || type == 'hidden') {
               return 'change';
             }
             else {
@@ -284,7 +282,7 @@ $.fn.form = function(fields, parameters) {
                 .html(errors[0])
               ;
               if(!promptExists) {
-                if(settings.transition && $.fn.transition !== undefined && $module.transition('is supported')) {
+                if(settings.transition && module.exports !== undefined && $module.transition('is supported')) {
                   module.verbose('Displaying error with css transition', settings.transition);
                   $prompt.transition(settings.transition + ' in', settings.duration);
                 }
@@ -320,7 +318,7 @@ $.fn.form = function(fields, parameters) {
             ;
             if(settings.inline && $prompt.is(':visible')) {
               module.verbose('Removing prompt for field', field);
-              if(settings.transition && $.fn.transition !== undefined && $module.transition('is supported')) {
+              if(settings.transition && module.exports !== undefined && $module.transition('is supported')) {
                 $prompt.transition(settings.transition + ' out', settings.duration, function() {
                   $prompt.remove();
                 });
@@ -601,7 +599,7 @@ $.fn.form = function(fields, parameters) {
   ;
 };
 
-$.fn.form.settings = {
+module.exports.settings = {
 
   name              : 'Form',
   namespace         : 'form',
@@ -637,7 +635,7 @@ $.fn.form.settings = {
     group   : '.field',
     input   : 'input',
     prompt  : '.prompt',
-    submit  : '.submit'
+    submit  : '.submit:not([type="submit"])'
   },
 
   className : {
@@ -737,4 +735,4 @@ $.fn.form.settings = {
 
 };
 
-})( jQuery, window , document );
+})( require("jquery"), window , document );
