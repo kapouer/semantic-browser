@@ -2,7 +2,7 @@
   "author": "Jack Lukic <jacklukic@gmail.com>",
   "name": "semantic-browser",
   "description": "semantic npm package for browsers",
-  "version": "0.18.0-1",
+  "version": "0.18.0-2",
   "homepage": "http://semantic-ui.com",
   "licenses": [
     {
