@@ -11,12 +11,12 @@
 
 ;(function ( $, window, document, undefined ) {
 
-  $.api = module.exports = function(parameters) {
+  $.api = $.fn.api = function(parameters) {
 
     var
       settings       = $.extend(true, {}, $.api.settings, parameters),
 
-      // if this keyword isn't a require("jquery") object, create one
+      // if this keyword isn't a jQuery object, create one
       context        = (typeof this != 'function')
         ? this
         : $('<div/>'),
@@ -523,7 +523,7 @@
   };
 
   // handle DOM attachment to API functionality
-  module.exports = function(parameters) {
+  $.fn.apiButton = function(parameters) {
     $(this)
       .each(function(){
         var
@@ -532,8 +532,8 @@
           selector = $(this).selector || '',
 
           settings = ( $.isFunction(parameters) )
-            ? $.extend(true, {}, $.api.settings, module.exports.settings, { stateContext: this, success: parameters })
-            : $.extend(true, {}, $.api.settings, module.exports.settings, { stateContext: this}, parameters),
+            ? $.extend(true, {}, $.api.settings, $.fn.apiButton.settings, { stateContext: this, success: parameters })
+            : $.extend(true, {}, $.api.settings, $.fn.apiButton.settings, { stateContext: this}, parameters),
           module
         ;
         module = {
@@ -625,10 +625,10 @@
 
   };
 
-  module.exports.settings = {
+  $.fn.apiButton.settings = {
     filter       : '.disabled, .loading',
     context      : false,
     stateContext : false
   };
 
-})( require("jquery"), window , document );
+})( jQuery, window , document );

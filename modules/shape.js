@@ -11,7 +11,7 @@
 
 ;(function ( $, window, document, undefined ) {
 
-module.exports = function(parameters) {
+$.fn.shape = function(parameters) {
   var
     $allModules     = $(this),
     $body           = $('body'),
@@ -29,7 +29,7 @@ module.exports = function(parameters) {
     .each(function() {
       var
         moduleSelector  = $allModules.selector || '',
-        settings        = $.extend(true, {}, module.exports.settings, parameters),
+        settings        = $.extend(true, {}, $.fn.shape.settings, parameters),
 
         // internal aliases
         namespace     = settings.namespace,
@@ -737,7 +737,7 @@ module.exports = function(parameters) {
   ;
 };
 
-module.exports.settings = {
+$.fn.shape.settings = {
 
   // module info
   name : 'Shape',
@@ -784,4 +784,4 @@ module.exports.settings = {
 };
 
 
-})( require("jquery"), window , document );
+})( jQuery, window , document );

@@ -11,7 +11,7 @@
 
 ;(function ($, window, document, undefined) {
 
-module.exports = function(parameters) {
+$.fn.popup = function(parameters) {
   var
     $allModules     = $(this),
     $document       = $(document),
@@ -31,8 +31,8 @@ module.exports = function(parameters) {
     .each(function() {
       var
         settings        = ( $.isPlainObject(parameters) )
-          ? $.extend(true, {}, module.exports.settings, parameters)
-          : $.extend({}, module.exports.settings),
+          ? $.extend(true, {}, $.fn.popup.settings, parameters)
+          : $.extend({}, $.fn.popup.settings),
 
         selector        = settings.selector,
         className       = settings.className,
@@ -288,7 +288,7 @@ module.exports = function(parameters) {
             $module
               .addClass(className.visible)
             ;
-            if(settings.transition && module.exports !== undefined && $module.transition('is supported')) {
+            if(settings.transition && $.fn.transition !== undefined && $module.transition('is supported')) {
               $popup
                 .transition(settings.transition + ' in', settings.duration, function() {
                   module.bind.close();
@@ -310,7 +310,7 @@ module.exports = function(parameters) {
           hide: function(callback) {
             callback = callback || function(){};
             module.debug('Hiding pop-up');
-            if(settings.transition && module.exports !== undefined && $module.transition('is supported')) {
+            if(settings.transition && $.fn.transition !== undefined && $module.transition('is supported')) {
               $popup
                 .transition(settings.transition + ' out', settings.duration, function() {
                   module.reset();
@@ -778,7 +778,7 @@ module.exports = function(parameters) {
   ;
 };
 
-module.exports.settings = {
+$.fn.popup.settings = {
 
   name           : 'Popup',
   debug          : false,
@@ -864,4 +864,4 @@ $.extend( $.easing, {
 });
 
 
-})( require("jquery"), window , document );
+})( jQuery, window , document );

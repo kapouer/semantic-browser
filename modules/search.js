@@ -11,7 +11,7 @@
 
 ;(function ($, window, document, undefined) {
 
-module.exports = function(source, parameters) {
+$.fn.search = function(source, parameters) {
   var
     $allModules     = $(this),
     moduleSelector  = $allModules.selector || '',
@@ -27,7 +27,7 @@ module.exports = function(source, parameters) {
   $(this)
     .each(function() {
       var
-        settings        = $.extend(true, {}, module.exports.settings, parameters),
+        settings        = $.extend(true, {}, $.fn.search.settings, parameters),
 
         className       = settings.className,
         selector        = settings.selector,
@@ -582,7 +582,7 @@ module.exports = function(source, parameters) {
   ;
 };
 
-module.exports.settings = {
+$.fn.search.settings = {
 
   name           : 'Search Module',
   namespace      : 'search',
@@ -763,4 +763,4 @@ module.exports.settings = {
   }
 };
 
-})( require("jquery"), window , document );
+})( jQuery, window , document );

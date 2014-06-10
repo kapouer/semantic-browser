@@ -11,7 +11,7 @@
 
 ;(function ( $, window, document, undefined ) {
 
-module.exports = function(parameters) {
+$.fn.dimmer = function(parameters) {
   var
     $allModules     = $(this),
 
@@ -29,8 +29,8 @@ module.exports = function(parameters) {
     .each(function() {
       var
         settings        = ( $.isPlainObject(parameters) )
-          ? $.extend(true, {}, module.exports.settings, parameters)
-          : $.extend({}, module.exports.settings),
+          ? $.extend(true, {}, $.fn.dimmer.settings, parameters)
+          : $.extend({}, $.fn.dimmer.settings),
 
         selector        = settings.selector,
         namespace       = settings.namespace,
@@ -155,7 +155,7 @@ module.exports = function(parameters) {
               : function(){}
             ;
             module.set.dimmed();
-            if(settings.on != 'hover' && settings.useCSS && module.exports !== undefined && $dimmer.transition('is supported')) {
+            if(settings.on != 'hover' && settings.useCSS && $.fn.transition !== undefined && $dimmer.transition('is supported')) {
               $dimmer
                 .transition({
                   animation : settings.transition + ' in',
@@ -190,7 +190,7 @@ module.exports = function(parameters) {
               ? callback
               : function(){}
             ;
-            if(settings.on != 'hover' && settings.useCSS && module.exports !== undefined && $dimmer.transition('is supported')) {
+            if(settings.on != 'hover' && settings.useCSS && $.fn.transition !== undefined && $dimmer.transition('is supported')) {
               module.verbose('Hiding dimmer with css');
               $dimmer
                 .transition({
@@ -538,7 +538,7 @@ module.exports = function(parameters) {
   ;
 };
 
-module.exports.settings = {
+$.fn.dimmer.settings = {
 
   name        : 'Dimmer',
   namespace   : 'dimmer',
@@ -590,4 +590,4 @@ module.exports.settings = {
 
 };
 
-})( require("jquery"), window , document );
+})( jQuery, window , document );

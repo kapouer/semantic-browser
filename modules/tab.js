@@ -11,10 +11,10 @@
 
 ;(function ($, window, document, undefined) {
 
-  module.exports = function(parameters) {
+  $.fn.tab = function(parameters) {
 
     var
-      settings        = $.extend(true, {}, module.exports.settings, parameters),
+      settings        = $.extend(true, {}, $.fn.tab.settings, parameters),
 
       $module         = $(this),
       $tabs           = $(settings.context).find(settings.selector.tabs),
@@ -644,7 +644,7 @@
     $(window).tab(settings);
   };
 
-  module.exports.settings = {
+  $.fn.tab.settings = {
 
     name        : 'Tab',
     debug       : false,
@@ -707,4 +707,4 @@
 
   };
 
-})( require("jquery"), window , document );
+})( jQuery, window , document );

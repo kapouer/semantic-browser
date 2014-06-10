@@ -11,7 +11,7 @@
 
 ;(function ( $, window, document, undefined ) {
 
-module.exports = function(parameters) {
+$.fn.sidebar = function(parameters) {
   var
     $allModules    = $(this),
     $body          = $('body'),
@@ -32,8 +32,8 @@ module.exports = function(parameters) {
     .each(function() {
       var
         settings        = ( $.isPlainObject(parameters) )
-          ? $.extend(true, {}, module.exports.settings, parameters)
-          : $.extend({}, module.exports.settings),
+          ? $.extend(true, {}, $.fn.sidebar.settings, parameters)
+          : $.extend({}, $.fn.sidebar.settings),
 
         selector        = settings.selector,
         className       = settings.className,
@@ -473,7 +473,7 @@ module.exports = function(parameters) {
   ;
 };
 
-module.exports.settings = {
+$.fn.sidebar.settings = {
 
   name        : 'Sidebar',
   namespace   : 'sidebar',
@@ -511,4 +511,4 @@ module.exports.settings = {
 
 };
 
-})( require("jquery"), window , document );
+})( jQuery, window , document );

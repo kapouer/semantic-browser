@@ -11,10 +11,10 @@
 
 ;(function ( $, window, document, undefined ) {
 
-module.exports = function(parameters) {
+$.fn.state = function(parameters) {
   var
     $allModules     = $(this),
-    settings        = $.extend(true, {}, module.exports.settings, parameters),
+    settings        = $.extend(true, {}, $.fn.state.settings, parameters),
 
     moduleSelector  = $allModules.selector || '',
 
@@ -616,7 +616,7 @@ module.exports = function(parameters) {
   ;
 };
 
-module.exports.settings = {
+$.fn.state.settings = {
 
   // module info
   name : 'State',
@@ -722,4 +722,4 @@ module.exports.settings = {
 
 
 
-})( require("jquery"), window , document );
+})( jQuery, window , document );

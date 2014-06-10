@@ -11,7 +11,7 @@
 
 ;(function ( $, window, document, undefined ) {
 
-module.exports = function(parameters) {
+$.fn.checkbox = function(parameters) {
   var
     $allModules    = $(this),
     moduleSelector = $allModules.selector || '',
@@ -28,7 +28,7 @@ module.exports = function(parameters) {
   $allModules
     .each(function() {
       var
-        settings        = $.extend(true, {}, module.exports.settings, parameters),
+        settings        = $.extend(true, {}, $.fn.checkbox.settings, parameters),
 
         className       = settings.className,
         namespace       = settings.namespace,
@@ -314,7 +314,7 @@ module.exports = function(parameters) {
   ;
 };
 
-module.exports.settings = {
+$.fn.checkbox.settings = {
 
   name        : 'Checkbox',
   namespace   : 'checkbox',
@@ -346,4 +346,4 @@ module.exports.settings = {
 
 };
 
-})( require("jquery"), window , document );
+})( jQuery, window , document );

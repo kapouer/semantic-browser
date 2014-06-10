@@ -11,7 +11,7 @@
 
 ;(function ($, window, document, undefined) {
 
-module.exports = function(parameters) {
+$.fn.accordion = function(parameters) {
   var
     $allModules     = $(this),
 
@@ -27,8 +27,8 @@ module.exports = function(parameters) {
     .each(function() {
       var
         settings        = ( $.isPlainObject(parameters) )
-          ? $.extend(true, {}, module.exports.settings, parameters)
-          : $.extend({}, module.exports.settings),
+          ? $.extend(true, {}, $.fn.accordion.settings, parameters)
+          : $.extend({}, $.fn.accordion.settings),
 
         className       = settings.className,
         namespace       = settings.namespace,
@@ -382,7 +382,7 @@ module.exports = function(parameters) {
   ;
 };
 
-module.exports.settings = {
+$.fn.accordion.settings = {
   name        : 'Accordion',
   namespace   : 'accordion',
 
@@ -424,5 +424,5 @@ $.extend( $.easing, {
   }
 });
 
-})( require("jquery"), window , document );
+})( jQuery, window , document );
 
