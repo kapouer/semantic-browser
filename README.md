@@ -1,4 +1,9 @@
-semantic-browser
-================
+semantic-browser DEPRECATED
+===========================
 
-semantic-ui npm package (for browser, not for node).
+Please use official upstream package, now available through npm:
+
+`npm install semantic-ui`
+
+
+
